@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 
-from world import World
+from world.world import World
 
 
 class WorldViewer:

@@ -2,7 +2,7 @@ import numpy as np
 
 from bodies.body import Body, InfMassBody
 from bodies.shapes import Circle
-from world import World
+from world.world import World
 from bodies.spring import Spring
 
 
@@ -94,3 +94,30 @@ def swing_spring_test():
                     k=1,
                     stationery_length=5)
     return World(bodies=[spring])
+
+
+def spring_and_collision_test():
+    body1 = Body(position=np.array([25., 5.]),
+                 velocity=np.array([3., 0.]),
+                 mass=2,
+                 friction_coeff=1,
+                 restitution_coeff=0.7,
+                 shape=Circle(1))
+    body2 = InfMassBody(position=np.array([25., 10.]),
+                        friction_coeff=1,
+                        restitution_coeff=0.9,
+                        shape=Circle(1))
+    spring = Spring(body1=body1,
+                    body2=body2,
+                    k=1,
+                    stationery_length=5)
+    return World(bodies=[spring,
+                         body1,
+                         body2,
+                         Body(position=np.array([10., 15.]),
+                              velocity=np.array([3., 0.]),
+                              mass=1,
+                              friction_coeff=1,
+                              restitution_coeff=0.7,
+                              shape=Circle(1)),
+                         ])

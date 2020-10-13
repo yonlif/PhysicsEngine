@@ -2,6 +2,7 @@ import numpy as np
 from typing import List
 
 from bodies.body import Body, EmptyBody
+from bodies.shapes import Line
 from utils import normalize
 
 
@@ -16,6 +17,7 @@ class Spring(EmptyBody):
         super().__init__()
         self.body1 = body1
         self.body2 = body2
+        self.shape = Line(self.body1, self.body2)
         self.k = k
         self.stationery_length = stationery_length
 
@@ -33,8 +35,6 @@ class Spring(EmptyBody):
             self.body1.velocity -= x_vector * self.k / self.body1.mass
         if self.body2.mass > 0:
             self.body2.velocity += x_vector * self.k / self.body2.mass
-        self.body1.update(timestamp)
-        self.body2.update(timestamp)
 
     def draw(self) -> List:
-        return self.body1.draw() + self.body2.draw()
+        return self.shape.draw(None)

@@ -1,9 +1,9 @@
 from world.world_viewer import WorldViewer
-from world.worlds import swing_spring_test
+from world.worlds import spring_and_collision_test
 
 
 def main():
-    my_world = swing_spring_test()
+    my_world = spring_and_collision_test()
     viewer = WorldViewer(my_world)
     viewer.run()
 

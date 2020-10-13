@@ -33,6 +33,7 @@ class ConvexPolygon(Shape):
     1. Vertices are ordered counter-clockwise
     2. The normal at index i corresponds to the edge between vertex i and (i + 1) % len(vertices)
     """
+
     def __init__(self, vertices: List[np.array]):
         self.vertices = vertices
         # TODO(Yonatan): Calculate normals
@@ -40,3 +41,20 @@ class ConvexPolygon(Shape):
 
     def draw(self, location: Tuple[float, float]):
         return None
+
+
+class Line(Shape):
+    def __init__(self, body1, body2):
+        self.body1 = body1
+        self.body2 = body2
+        self.line = None
+        self.text = None
+
+    def draw(self, location: Tuple[float, float]) -> List:
+        if not self.line:
+            self.line, = plt.plot([self.body1.position[0], self.body2.position[0]],
+                                   [self.body1.position[1], self.body2.position[1]])
+            return []
+        self.line.set_data([self.body1.position[0], self.body2.position[0]],
+                           [self.body1.position[1], self.body2.position[1]])
+        return [self.line]
