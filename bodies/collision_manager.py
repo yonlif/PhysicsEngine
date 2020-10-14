@@ -3,10 +3,10 @@ This file is based on the tutorial:
 https://gamedevelopment.tutsplus.com/tutorials/how-to-create-a-custom-2d-physics-engine-the-basics-and-impulse-resolution--gamedev-6331
 """
 import numpy as np
-import logging
 
 from bodies.body import Body
-from bodies.shapes import Circle, ConvexPolygon
+from bodies.convex_polygon import ConvexPolygon
+from bodies.shapes import Circle
 from utils import normalize
 
 
@@ -26,7 +26,7 @@ def collision_resolver(a: Body, b: Body):
     Note - This is actually working well with the fact that infinite mass is represented as 0 mass
     TODO (Yonatan): Make it work for ConvexPolygons
     """
-    logging.info(f"Resolving collision between {b} and {b}")
+    print(f"Resolving collision between {b} and {b}")
     relative_velocity = a.velocity - b.velocity
     # The normal of the collision between two circles is always the vector between their centers
     normal_vector = normalize(a.position - b.position)
@@ -35,7 +35,7 @@ def collision_resolver(a: Body, b: Body):
 
     # If in the next frame they are already separating - do not act
     if vel_along_normal >= 0:
-        logging.info(f"Collision between {b} and {b} did not need to be resolved")
+        print(f"Collision between {b} and {b} did not need to be resolved")
         return None
 
     # The restitution coefficient is always the min

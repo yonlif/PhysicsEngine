@@ -20,8 +20,8 @@ class Body:
         self.restitution_coeff = restitution_coeff
         self.friction_coeff = friction_coeff
 
-    def update(self, timestamp: float):
-        self.position = self.position + self.velocity * timestamp
+    def update(self):
+        self.position = self.position + self.velocity
 
     def draw(self) -> List:
         x, y = self.position[0], self.position[1]
@@ -39,7 +39,7 @@ class InfMassBody(Body):
         self.mass = 0
         self.mass_inv = 0
 
-    def update(self, timestamp):
+    def update(self):
         pass
 
 
@@ -54,7 +54,7 @@ class EmptyBody(Body):
         self.mass = 0
         self.mass_inv = 0
 
-    def update(self, timestamp):
+    def update(self):
         pass
 
     def draw(self) -> List:

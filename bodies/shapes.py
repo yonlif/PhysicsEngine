@@ -27,22 +27,6 @@ class Circle(Shape):
         return [self.circle, self.text]
 
 
-class ConvexPolygon(Shape):
-    """
-    Conventions:
-    1. Vertices are ordered counter-clockwise
-    2. The normal at index i corresponds to the edge between vertex i and (i + 1) % len(vertices)
-    """
-
-    def __init__(self, vertices: List[np.array]):
-        self.vertices = vertices
-        # TODO(Yonatan): Calculate normals
-        self.normals = []
-
-    def draw(self, location: Tuple[float, float]):
-        return None
-
-
 class Line(Shape):
     def __init__(self, body1, body2):
         self.body1 = body1

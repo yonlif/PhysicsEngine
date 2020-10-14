@@ -21,7 +21,7 @@ class Spring(EmptyBody):
         self.k = k
         self.stationery_length = stationery_length
 
-    def update(self, timestamp):
+    def update(self):
         """
         Hooke's law states that `F = k * x`
         Than `k * x = m * a`
