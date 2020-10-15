@@ -1,7 +1,7 @@
 from typing import List
 
 from bodies.body import Body
-from bodies.collision_manager import collision_detector, collision_resolver
+from bodies.collisions.collision_manager import collision_detector, collision_resolver
 from physics_constants import g_vector
 
 
@@ -17,5 +17,6 @@ class World:
                 body.velocity += self.gravity
         for i, a in enumerate(self.bodies[:-1]):
             for j, b in enumerate(self.bodies[i + 1:]):
-                if collision_detector(a, b):
-                    collision_resolver(a, b)
+                manifold = collision_detector(a, b)
+                if manifold:
+                    collision_resolver(manifold)

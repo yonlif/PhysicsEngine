@@ -6,48 +6,46 @@ import numpy as np
 
 from bodies.body import Body
 from bodies.convex_polygon import ConvexPolygon
+from bodies.collisions.manifold import Manifold
 from bodies.shapes import Circle
 from utils import normalize
 
 
-def collision_detector(a: Body, b: Body) -> bool:
+def collision_detector(a: Body, b: Body) -> Manifold:
     a_shape = a.shape
     b_shape = b.shape
     if type(a.shape) == Circle and type(b.shape) == Circle:
         r = a_shape.radius + b_shape.radius
-        return r >= np.linalg.norm(a.position - b.position)
+        if r >= np.linalg.norm(a.position - b.position):
+            return Manifold(a, b, normalize(a.position - b.position))
     elif type(a.shape) == ConvexPolygon or type(b.shape) == ConvexPolygon:
-        raise NotImplementedError("Does not support ConvexPolygon collision yet")
+        print("Does not support ConvexPolygon collision yet")
+    return None
 
 
-def collision_resolver(a: Body, b: Body):
+def collision_resolver(m: Manifold):
     """
     Resolving the collision between two bodies by changing their velocity.
     Note - This is actually working well with the fact that infinite mass is represented as 0 mass
-    TODO (Yonatan): Make it work for ConvexPolygons
     """
-    print(f"Resolving collision between {b} and {b}")
-    relative_velocity = a.velocity - b.velocity
+    print(f"Resolving collision between {m.a} and {m.b}")
+    relative_velocity = m.a.velocity - m.b.velocity
     # The normal of the collision between two circles is always the vector between their centers
-    normal_vector = normalize(a.position - b.position)
     # Calculating the velocity that needs to affect the ball
-    vel_along_normal = np.dot(relative_velocity, normal_vector)
+    vel_along_normal = np.dot(relative_velocity, m.normal_vector)
 
     # If in the next frame they are already separating - do not act
     if vel_along_normal >= 0:
-        print(f"Collision between {b} and {b} did not need to be resolved")
+        print(f"Collision between {m.a} and {m.b} did not need to be resolved")
         return None
 
     # The restitution coefficient is always the min
-    e = min(a.restitution_coeff, b.restitution_coeff)
+    e = min(m.a.restitution_coeff, m.b.restitution_coeff)
 
     # Idk some physics or something
     j = -(1 + e) * vel_along_normal
-    j /= a.mass_inv + b.mass_inv
+    j /= m.a.mass_inv + m.b.mass_inv
 
-    impulse = j * normal_vector
-    mass_sum = a.mass + b.mass
-    ratio = a.mass / mass_sum
-    a.velocity += ratio * impulse
-    ratio = b.mass / mass_sum
-    b.velocity -= ratio * impulse
+    impulse = j * m.normal_vector
+    m.a.velocity += m.a.mass_inv * impulse
+    m.b.velocity -= m.b.mass_inv * impulse

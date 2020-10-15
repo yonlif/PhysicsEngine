@@ -26,6 +26,9 @@ class Circle(Shape):
         self.text.set_text(xy_to_text(location))
         return [self.circle, self.text]
 
+    def __repr__(self):
+        return "Circle"
+
 
 class Line(Shape):
     def __init__(self, body1, body2):
@@ -42,3 +45,6 @@ class Line(Shape):
         self.line.set_data([self.body1.position[0], self.body2.position[0]],
                            [self.body1.position[1], self.body2.position[1]])
         return [self.line]
+
+    def __repr__(self):
+        return "Line"

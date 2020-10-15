@@ -31,6 +31,21 @@ def inf_mass_test():
                          ], gravity=None)
 
 
+def simple_two_mass_test():
+    return World(bodies=[Body(position=np.array([30., 10.]),
+                              velocity=np.array([-0.1, 0.]),
+                              mass=1,
+                              friction_coeff=1,
+                              restitution_coeff=0.9,
+                              shape=Circle(1)),
+                         Body(position=np.array([0., 10.]),
+                              velocity=np.array([0.1, 0.]),
+                              mass=2,
+                              friction_coeff=1,
+                              restitution_coeff=0.9,
+                              shape=Circle(1)),
+                         ], gravity=None)
+
 def two_mass_test():
     return World(bodies=[Body(position=np.array([30., 10.]),
                               velocity=np.array([-0.1, 0.]),

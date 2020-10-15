@@ -27,6 +27,9 @@ class Body:
         x, y = self.position[0], self.position[1]
         return self.shape.draw((x, y))
 
+    def __repr__(self):
+        return f"<{self.shape} at {self.position}>"
+
 
 class InfMassBody(Body):
     def __init__(self, position: np.array, restitution_coeff, shape, friction_coeff):
