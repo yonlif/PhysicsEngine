@@ -21,7 +21,7 @@ class Spring(EmptyBody):
         self.k = k
         self.stationery_length = stationery_length
 
-    def update(self):
+    def update(self, timedelta=1):
         """
         Hooke's law states that `F = k * x`
         Than `k * x = m * a`
@@ -32,9 +32,9 @@ class Spring(EmptyBody):
         x_vector = normalize(self.body1.position - self.body2.position) * x_magnitude
         # Check mass for infinite mass
         if self.body1.mass > 0:
-            self.body1.velocity -= x_vector * self.k / self.body1.mass
+            self.body1.acceleration -= x_vector * self.k * self.body1.mass_inv
         if self.body2.mass > 0:
-            self.body2.velocity += x_vector * self.k / self.body2.mass
+            self.body2.acceleration += x_vector * self.k * self.body2.mass_inv
 
     def draw(self) -> List:
-        return self.shape.draw(None)
+        return self.shape.draw(None, 0)
