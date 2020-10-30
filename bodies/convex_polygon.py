@@ -32,7 +32,7 @@ class ConvexPolygon(Shape):
         inertia = 0
         for v1, v2 in zip(self.vertices, self.vertices[1:] + [self.vertices[0]]):
             relative_tri = 0.5 * abs(np.cross(v1, v2)) / self.polygon_area
-            inertia_tri = relative_tri * (np.linalg.norm(v1) + np.linalg.norm(v2) + np.dot(v1, v2)) / 6
+            inertia_tri = relative_tri * (np.linalg.norm(v1) + np.linalg.norm(v2) + abs(np.dot(v1, v2))) / 6
             inertia += inertia_tri
         self.inertia_m = inertia
 

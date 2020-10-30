@@ -76,6 +76,11 @@ def collision_detector(a: Body, b: Body) -> Manifold:
     return None
 
 
+def apply_force_at_point(body: Body, force_vector: np.array, point: np.array):
+    body.velocity += body.mass_inv * force_vector
+    body.angular_velocity += np.cross(point - body.position, force_vector) / body.shape.inertia_m * body.mass_inv
+
+
 def collision_resolver(m: Manifold):
     """
     Resolving the collision between two bodies by changing their velocity.
@@ -92,6 +97,7 @@ def collision_resolver(m: Manifold):
         print(f"Collision between {m.a} and {m.b} did not need to be resolved")
         return None
 
+    # --- Calculate impulse ---
     # The restitution coefficient is always the min
     e = min(m.a.restitution_coeff, m.b.restitution_coeff)
 
@@ -100,8 +106,18 @@ def collision_resolver(m: Manifold):
     j /= m.a.mass_inv + m.b.mass_inv
 
     impulse = j * m.normal_vector
-    m.a.velocity += m.a.mass_inv * impulse
-    m.b.velocity -= m.b.mass_inv * impulse
 
-    m.a.angular_velocity += np.cross(m.collision_point - m.a.position, impulse) / m.a.shape.inertia_m * m.a.mass_inv
-    m.b.angular_velocity -= np.cross(m.collision_point - m.b.position, impulse) / m.b.shape.inertia_m * m.b.mass_inv
+    # --- Calculate friction ---
+    friction_force = j * m.a.friction_coeff * m.b.friction_coeff
+    norm_to_norm = normal_vector(m.normal_vector)
+    relative_velocity_projected = normalize(project_vector(norm_to_norm, relative_velocity))
+    friction_vector_a = - relative_velocity_projected * friction_force
+    friction_vector_b = relative_velocity_projected * friction_force
+
+    # --- Apply impulse ---
+    apply_force_at_point(m.a, impulse, m.collision_point)
+    apply_force_at_point(m.b, - impulse, m.collision_point)
+
+    # --- Apply friction ---
+    apply_force_at_point(m.a, friction_vector_a, m.collision_point)
+    apply_force_at_point(m.b, friction_vector_b, m.collision_point)

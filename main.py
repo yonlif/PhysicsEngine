@@ -3,8 +3,8 @@ from world.worlds import *
 
 
 def main():
-    my_world = advanced_bounce_house_test()
-    viewer = WorldViewer(my_world, speed=2, frame_delay=20)
+    my_world = ball_and_floor()
+    viewer = WorldViewer(my_world, speed=0.1, frame_delay=20)
     viewer.run()
 
 

@@ -312,7 +312,7 @@ def trapezoid_test():
                  velocity=np.array([0., 0.]),
                  mass=100,
                  friction_coeff=1,
-                 restitution_coeff=0.7,
+                 restitution_coeff=1,
                  shape=ConvexPolygon(vertices=[np.array([-5., -5.]),
                                                np.array([-5., 5.]),
                                                np.array([15., 5.]),
@@ -321,6 +321,51 @@ def trapezoid_test():
                  velocity=np.array([-0.1, 0.]),
                  mass=1,
                  friction_coeff=1,
-                 restitution_coeff=0.9,
+                 restitution_coeff=1,
                  shape=Circle(1))
     return World(bodies=[body1, body2], gravity=None)
+
+
+def two_pendulums_test():
+    top = InfMassBody(position=np.array([25., 10.]),
+                        friction_coeff=1,
+                        restitution_coeff=0.9,
+                        shape=Circle(1))
+    middle = Body(position=np.array([25., 20.]),
+                  velocity=np.array([0., 0.]),
+                  mass=1,
+                  friction_coeff=1,
+                  restitution_coeff=1,
+                  shape=Circle(1))
+    bottom = Body(position=np.array([25., 30.]),
+                  velocity=np.array([0., 0.]),
+                  mass=1,
+                  friction_coeff=1,
+                  restitution_coeff=1,
+                  shape=Circle(1))
+    spring1 = Spring(body1=top,
+                     body2=middle,
+                     k=0.1,
+                     stationery_length=10)
+    spring2 = Spring(body1=middle,
+                     body2=bottom,
+                     k=0.1,
+                     stationery_length=10)
+    return World(bodies=[top, middle, bottom, spring1, spring2], gravity=np.array([0., -0.01]))
+
+
+def ball_and_floor():
+    ball = Body(position=np.array([2., 3.]),
+                velocity=np.array([1., 4.]),
+                mass=1,
+                friction_coeff=0.1,
+                restitution_coeff=1,
+                shape=Circle(1))
+    floor = InfMassBody(position=np.array([25., 0.]),
+                        friction_coeff=0.1,
+                        restitution_coeff=0.9,
+                        shape=ConvexPolygon(vertices=[np.array([-25., -1.]),
+                                                      np.array([-25., 1.]),
+                                                      np.array([25., 1.]),
+                                                      np.array([25., -1.])]))
+    return World(bodies=[ball, floor], gravity=np.array([0., -0.9]))

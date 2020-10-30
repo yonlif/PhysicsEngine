@@ -31,6 +31,7 @@ class Body:
         self.friction_coeff = friction_coeff
 
     def update(self, timedelta=1):
+        # print(self.velocity)
         self.velocity += self.acceleration * timedelta
         self.position = self.position + self.velocity * timedelta
 
